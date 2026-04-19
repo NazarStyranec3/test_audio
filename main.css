@@ -1,41 +1,65 @@
-document.addEventListener('DOMContentLoaded', function() {
-    
-  const wavesurfer = WaveSurfer.create({
-      container: '#waveform',
-      waveColor: 'rgba(255, 255, 255, 0.3)',
-      progressColor: '#3390ec',
-      cursorWidth: 0,
-      barWidth: 3,
-      barGap: 3,
-      barRadius: 3,
-      height: 50,
-      // ЦЕЙ РЯДОК ВИРІШУЄ ПРОБЛЕМУ ЗІ ЗВУКОМ У 90% ВИПАДКІВ:
-      backend: 'MediaElement', 
-      url: 'audio/audio_week.mp3',
-  });
-
-  const playBtn = document.getElementById('playPauseBtn');
-  const icon = document.getElementById('icon');
-
-  playBtn.addEventListener('click', function() {
-      // Додаткова перевірка: якщо звук вимкнено в браузері
-      if (wavesurfer.getVolume() === 0) {
-          wavesurfer.setVolume(1);
-      }
-      
-      console.log("Клікнули! Поточний стан:", wavesurfer.isPlaying() ? "грає" : "пауза");
-      wavesurfer.playPause();
-  });
-
-  // Зміна іконок
-  wavesurfer.on('play', () => icon.textContent = '⏸');
-  wavesurfer.on('pause', () => icon.textContent = '▶');
-  wavesurfer.on('finish', () => {
-      icon.textContent = '▶';
-      wavesurfer.setTime(0);
-  });
-
-  // ЛОГ ДЛЯ ПЕРЕВІРКИ
-  wavesurfer.on('ready', () => console.log("Звук готовий до відтворення!"));
-  wavesurfer.on('error', (err) => alert("Помилка: " + err));
-});
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #1a1a2e, #5f0f40, #3a86ff);
+  }
+  
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; 
+    color:  #eaf6ff;
+  }
+  /* Загальний фон сторінки */
+  body {
+    background: linear-gradient(135deg, #1a1a2e, #5f0f40, #3a86ff);
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+  }
+  
+  /* Контейнер плеєра */
+  .audio-card {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1); /* Скляний ефект */
+    backdrop-filter: blur(12px);
+    padding: 15px 25px;
+    border-radius: 50px;
+    width: 450px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Кнопка Play */
+  .play-btn {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    border-radius: 50%;
+    background-color: #3390ec; /* Фірмовий синій Telegram */
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+  }
+  
+  .play-btn:hover {
+    transform: scale(1.1);
+    background-color: #2b7cd1;
+  }
+  
+  /* Область хвилі */
+  #waveform {
+    flex-grow: 1;
+    margin-left: 20px;
+    cursor: pointer;
+  }
