@@ -1,0 +1,41 @@
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const wavesurfer = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: 'rgba(255, 255, 255, 0.3)',
+        progressColor: '#3390ec',
+        cursorWidth: 0,
+        barWidth: 3,
+        barGap: 3,
+        barRadius: 3,
+        height: 50,
+        // ЦЕЙ РЯДОК ВИРІШУЄ ПРОБЛЕМУ ЗІ ЗВУКОМ У 90% ВИПАДКІВ:
+        backend: 'MediaElement', 
+        url: 'audio/audio_week.mp3',
+    });
+
+    const playBtn = document.getElementById('playPauseBtn');
+    const icon = document.getElementById('icon');
+
+    playBtn.addEventListener('click', function() {
+        // Додаткова перевірка: якщо звук вимкнено в браузері
+        if (wavesurfer.getVolume() === 0) {
+            wavesurfer.setVolume(1);
+        }
+        
+        console.log("Клікнули! Поточний стан:", wavesurfer.isPlaying() ? "грає" : "пауза");
+        wavesurfer.playPause();
+    });
+
+    // Зміна іконок
+    wavesurfer.on('play', () => icon.textContent = '⏸');
+    wavesurfer.on('pause', () => icon.textContent = '▶');
+    wavesurfer.on('finish', () => {
+        icon.textContent = '▶';
+        wavesurfer.setTime(0);
+    });
+
+    // ЛОГ ДЛЯ ПЕРЕВІРКИ
+    wavesurfer.on('ready', () => console.log("Звук готовий до відтворення!"));
+    wavesurfer.on('error', (err) => alert("Помилка: " + err));
+});
